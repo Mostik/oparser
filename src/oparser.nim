@@ -3,16 +3,11 @@ var params = commandLineParams()
 
 template oparser*(body: untyped) =
   body
-  
 
-template add*(lc: string, fc: string, dis: string, body: untyped) =
-  echo params
+template add*(lc: string, fc: string, dis: string, arg, body: untyped) =
+  var arg: string
   for kind, key, val in getopt(params):
-    echo "kind ", kind
-    echo "key ", key
-    echo "lc ", lc
-    echo (key == lc)
-    echo (key == fc)
+    arg = val
     if (kind == cmdShortOption):
       if (("-" & key) == lc):
         body
