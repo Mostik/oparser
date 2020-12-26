@@ -1,10 +1,12 @@
 import parseopt, os
 var params = commandLineParams()
 
-template oparser*(body: untyped) =
+template oparser*(parser, body: untyped) =
+  var parser: seq[seq[string]]
   body
 
-template add*(lc: string, fc: string, dis: string, arg, body: untyped) =
+template add*(parser: seq[seq[string]], lc: string, fc: string, dis: string, arg, body: untyped) =
+  parser.add(@[lc, fc, dis])
   var arg: string
   for kind, key, val in getopt(params):
     arg = val
@@ -18,7 +20,8 @@ template add*(lc: string, fc: string, dis: string, arg, body: untyped) =
       if (key == fc):
         body
 
-template add*(lc: string, fc: string, dis: string, body: untyped) =
+template add*(parser: seq[seq[string]], lc: string, fc: string, dis: string, body: untyped) =
+  parser.add(@[lc, fc, dis])
   for kind, key, val in getopt(params):
     if (kind == cmdShortOption):
       if (("-" & key) == lc):
@@ -29,3 +32,4 @@ template add*(lc: string, fc: string, dis: string, body: untyped) =
     elif (kind == cmdArgument):
       if (key == fc):
         body
+
