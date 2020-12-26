@@ -17,3 +17,15 @@ template add*(lc: string, fc: string, dis: string, arg, body: untyped) =
     elif (kind == cmdArgument):
       if (key == fc):
         body
+
+template add*(lc: string, fc: string, dis: string, body: untyped) =
+  for kind, key, val in getopt(params):
+    if (kind == cmdShortOption):
+      if (("-" & key) == lc):
+        body
+    elif (kind == cmdLongOption):
+      if (("--" & key) == fc):
+        body
+    elif (kind == cmdArgument):
+      if (key == fc):
+        body
